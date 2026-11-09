@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import './styles.css';
 import './features.css';
 
-const API = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+const API = import.meta.env.VITE_API_URL || 'https://cgl6-backend.onrender.com';
 const WS = API.replace(/^http/, 'ws');
 const FAULT_TARGETS = { b4_tension_oscillation: 'b4', b4_torque_spike: 'b4a', speed_feedback_fault: 'b4', drive_comms_fault: 'b4', brake_snubber_event: 'b4b', load_cell_noise: 'b4', cooling_zone_failure: 'cooling', furnace_zone_imbalance: 'furnace', furnace_zone_unbalance: 'furnace', zinc_pot_temp_deviation: 'zinc' };
 const FAULT_TARGET_LABELS = { b4: 'B4 bridle / drive station', b4a: 'B4A drive', b4b: 'B4B drive', cooling: 'Cooling section', furnace: 'Furnace section', zinc: 'Zinc pot' };
