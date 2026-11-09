@@ -1,0 +1,149 @@
+import math, random, time
+from .models import *
+from .collector import SimulatedCollector
+from .engineering_data import SEED, engineering_summary
+
+class CGL6Twin:
+    def __init__(self):
+        self.t=0.0; self.mode="LIVE_SIMULATION"
+        self.collector=SimulatedCollector()
+        self.coil_pos=0.0; self.active_faults={}; self.whatif={}
+        metadata=SEED["metadata"]
+        bridles=SEED["bridles"]
+        self.base_speed=float(metadata["nominal_speed_mpm"])
+        self.base_thickness=float(metadata["supported_thicknesses_mm"][1])
+        self.base_width=1000.0
+        self.base_tension=float(bridles["nominal_tension_kn"])*1000/9.80665
+        self.base_zinc_temp=float(SEED["pot"]["bath_temperature_c"])
+        self.base_coating=float(SEED["quality"]["coating_target_g_m2"])
+        self.furnace_zone_setpoints=[float(v) for v in SEED["furnace"]["zone_setpoints_c"]]
+        self.line_length=1650.0
+
+    def config(self):
+        return {
+            "site":"JSW JFE Steel Limited",
+            "line":"CGL Line 6",
+            "technology":"CMI-type continuous galvanizing line",
+            "nominal_capacity_mt":21,
+            "bridle_count":engineering_summary()["bridles"]["total"],
+            "simulation":True,
+            "data_source":"ENGINEERING SEED SIMULATION — NOT PLANT DATA",
+            "future_plc_interface":"backend/app/collector.py",
+            "engineering_basis":engineering_summary()
+        }
+
+    def set_mode(self,mode): self.mode=mode
+    def set_fault(self,fault,enabled=True,severity=1):
+        if enabled: self.active_faults[fault]=max(.1,min(2.,severity))
+        else: self.active_faults.pop(fault,None)
+    def set_whatif(self,**kw): self.whatif={k:v for k,v in kw.items() if v is not None}
+
+    def step(self,dt=.2):
+        self.t+=dt
+        speed=float(self.whatif.get("line_speed_mpm",self.base_speed))+1.0*math.sin(self.t/4)
+        thick=float(self.whatif.get("thickness_mm",self.base_thickness))
+        tension_sp=float(self.whatif.get("tension_kg",self.base_tension))
+        if "speed_feedback_fault" in self.active_faults:
+            speed+=4*self.active_faults["speed_feedback_fault"]*math.sin(self.t*8)
+        tension=tension_sp+3.5*math.sin(self.t/2.2)
+        if "b4_tension_oscillation" in self.active_faults:
+            tension+=55*self.active_faults["b4_tension_oscillation"]*math.sin(self.t*5)
+        if "load_cell_noise" in self.active_faults: tension+=random.gauss(0,18*self.active_faults["load_cell_noise"])
+        self.coil_pos=(self.coil_pos+speed*dt/60)%self.line_length
+
+        bridles=[]
+        ratios=[1.000,1.0015,1.0025,1.0030,1.0010]
+        for i in range(5):
+            bt=tension*(1+.012*math.sin(self.t+i))
+            bridles.append(Bridle(
+                id=f"B{i+1}",name=f"Bridle {i+1}",speed_mpm=speed*ratios[i],
+                tension_kg=bt,torque_pct=34+i*2.4+3*math.sin(self.t*.6+i),
+                load_pct=43+i*1.9,slip_pct=.10+.04*abs(math.sin(self.t+i)),
+                speed_ratio=ratios[i],health="GREEN"))
+
+        specs=[("D-B1","B1 Drive",95.8,40.5,46),("D-B2","B2 Drive",96.2,41.2,47.5),
+               ("D-B3","B3 Drive",96,42,49),("D-B4A","B4A Drive",96.3,44,51.4),
+               ("D-B4B","B4B Drive",96.2,43.7,48.6),("D-REC","Recoiler Drive",94.8,57,63)]
+        drives=[]
+        for did,name,rpm,torque,load in specs:
+            if did=="D-B4A" and "b4_torque_spike" in self.active_faults:
+                torque+=16*self.active_faults["b4_torque_spike"]*math.sin(self.t*9)
+            current=max(70,90+1.65*abs(torque)+4*math.sin(self.t))
+            mt=43+.055*current; dtp=38+.04*current
+            health="RED" if mt>78 or dtp>72 else "AMBER" if mt>68 or dtp>63 else "GREEN"
+            drives.append(Drive(
+                id=did,name=name,rpm=rpm+.2*math.sin(self.t),speed_mpm=speed,
+                torque_pct=torque,current_a=current,load_pct=load,
+                motor_temp_c=mt,drive_temp_c=dtp,dc_bus_v=540+3*math.sin(self.t/5),
+                speed_error_pct=abs(math.sin(self.t))*.12,
+                encoder_ok=not("encoder_fault" in self.active_faults and "B4" in name),
+                communication_ok=not("drive_comms_fault" in self.active_faults and "B4" in name),
+                health=health,state="RUN"))
+
+        furnace=[]
+        zsp=self.furnace_zone_setpoints
+        for i,sp in enumerate(zsp):
+            temp=sp+4*math.sin(self.t/3+i)
+            if "furnace_zone_unbalance" in self.active_faults and i in [1,2]:
+                temp+=35*self.active_faults["furnace_zone_unbalance"]
+            furnace.append(FurnaceZone(
+                id=f"FURNACE-Z{i+1}",name=f"Furnace Zone {i+1}",temperature_c=temp,
+                setpoint_c=sp,output_pct=max(0,min(100,50+9*math.sin(self.t/5+i))),
+                delta_c=temp-sp,heat_index=max(0,min(100,50+(temp-sp)*1.1)),
+                status="RED" if abs(temp-sp)>25 else "AMBER" if abs(temp-sp)>12 else "GREEN"))
+
+        cooling=[]
+        cooling_start=float(SEED["furnace"]["nominal_strip_outlet_temp_c"])
+        cooling_end=float(SEED["cooling"]["nominal_outlet_strip_temp_c"])
+        for i in range(6):
+            target=cooling_start+(cooling_end-cooling_start)*i/5
+            st=target+4*math.sin(self.t+i)
+            if "cooling_zone_failure" in self.active_faults and i==2:
+                st+=75*self.active_faults["cooling_zone_failure"]
+            cooling.append(CoolingZone(
+                id=f"CW-{i+1}",name=f"Cooling Zone {i+1}",strip_temp_c=st,
+                water_temp_c=31+i*.7,flow_m3h=145-i*5,pressure_bar=4+.08*math.sin(self.t),
+                output_pct=55+7*math.sin(self.t/4+i),delta_to_target_c=st-target,
+                status="RED" if abs(st-target)>45 else "AMBER" if abs(st-target)>20 else "GREEN"))
+
+        zsp2=float(self.whatif.get("zinc_temp_c",self.base_zinc_temp))
+        ztemp=zsp2+1.2*math.sin(self.t/4)
+        if "zinc_pot_temp_deviation" in self.active_faults:
+            ztemp+=18*self.active_faults["zinc_pot_temp_deviation"]
+        coating=self.base_coating+1.8*math.sin(self.t/3)
+        quality=max(0,min(100,98-abs(tension-tension_sp)*.025-abs(ztemp-zsp2)*.15))
+        coil=Coil(
+            coil_id="CGL6-ENGINEERING-SEED-SIM",grade="DX51D",width_mm=self.base_width,
+            thickness_mm=thick,total_length_m=self.line_length,
+            remaining_length_m=max(0,self.line_length-self.coil_pos),position_m=self.coil_pos,
+            speed_mpm=speed,entry_temp_c=30+2*math.sin(self.t/5),
+            furnace_exit_temp_c=float(SEED["furnace"]["nominal_strip_outlet_temp_c"])+4*math.sin(self.t/4),
+            zinc_entry_temp_c=self.base_zinc_temp+3*math.sin(self.t/3),
+            zinc_exit_temp_c=self.base_zinc_temp+2*math.sin(self.t/3),
+            top_coat_gm2=coating,bottom_coat_gm2=coating*1.02,quality_score=quality)
+
+        alarms=[]
+        labels={"b4_tension_oscillation":"B4 tension instability",
+                "b4_torque_spike":"B4 torque spike","encoder_fault":"B4 encoder feedback fault",
+                "drive_comms_fault":"B4 drive communication fault",
+                "cooling_zone_failure":"Cooling zone deviation",
+                "furnace_zone_unbalance":"Furnace zone imbalance",
+                "zinc_pot_temp_deviation":"Zinc pot temperature deviation"}
+        for k,v in labels.items():
+            if k in self.active_faults: alarms.append(v)
+
+        return Telemetry(
+            timestamp=time.time(),mode=self.mode,data_quality="ENGINEERING SEED SIMULATION",
+            line_speed_mpm=speed,strip_width_mm=self.base_width,strip_thickness_mm=thick,
+            line_tension_kg=tension,line_length_m=self.line_length,coil=coil,
+            bridles=bridles,drives=drives,furnace_zones=furnace,cooling_zones=cooling,
+            zinc_pot=ZincPot(
+                temperature_c=ztemp,setpoint_c=zsp2,level_mm=620+4*math.sin(self.t/7),
+                al_pct=.21+.006*math.sin(self.t/10),fe_pct=.018+.0015*math.sin(self.t/11),
+                bath_delta_c=ztemp-zsp2,strip_entry_temp_c=self.base_zinc_temp+3*math.sin(self.t/3),
+                strip_exit_temp_c=self.base_zinc_temp+2*math.sin(self.t/3),
+                air_knife_pressure_bar=1.8+.03*math.sin(self.t),
+                coating_gm2=coating,status="GREEN" if abs(ztemp-zsp2)<8 else "AMBER"),
+            equipment_health_pct=max(0,99-5*len(self.active_faults)),
+            network_health_pct=99.5,plc_health_pct=99.8,
+            alarms=alarms,active_faults=self.active_faults.copy())

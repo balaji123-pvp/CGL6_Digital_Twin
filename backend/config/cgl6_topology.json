@@ -1,0 +1,109 @@
+{
+  "sections": [
+    {
+      "id": "S01",
+      "name": "Entry / Payoff",
+      "critical": [
+        "LINE_SPEED",
+        "STRIP_TENSION",
+        "STRIP_CENTER_OFFSET",
+        "PAYOFF_TORQUE"
+      ]
+    },
+    {
+      "id": "S02",
+      "name": "Entry Accumulator",
+      "critical": [
+        "ENTRY_ACC_LEVEL",
+        "ENTRY_ACC_SPEED",
+        "ENTRY_ACC_TENSION"
+      ]
+    },
+    {
+      "id": "S03",
+      "name": "Welder / Crop Shear / Tracking",
+      "critical": [
+        "WELDER_READY",
+        "CROP_SHEAR_READY",
+        "STRIP_CENTER_OFFSET"
+      ]
+    },
+    {
+      "id": "S04",
+      "name": "Bridle 1A-1D",
+      "critical": [
+        "B1_SPEED",
+        "B1_TENSION",
+        "B2_SPEED",
+        "B2_TENSION",
+        "B3_SPEED",
+        "B3_TENSION",
+        "B4_SPEED",
+        "B4_TENSION"
+      ]
+    },
+    {
+      "id": "S05",
+      "name": "Cleaning",
+      "critical": [
+        "ALKALI_TEMP",
+        "ALKALI_CONC",
+        "ALKALI_FLOW",
+        "BRUSH1_PRESSURE",
+        "BRUSH2_PRESSURE",
+        "CLEANLINESS_INDEX"
+      ]
+    },
+    {
+      "id": "S06",
+      "name": "HAG / Annealing Furnace",
+      "critical": [
+        "FURNACE_O2",
+        "FURNACE_H2",
+        "FURNACE_PRESSURE",
+        "FURNACE_OUTLET_TEMP"
+      ]
+    },
+    {
+      "id": "S07",
+      "name": "Zinc Pot",
+      "critical": [
+        "BATH_TEMP",
+        "BATH_LEVEL",
+        "POT_HEATER_POWER",
+        "DROSS_RATE"
+      ]
+    },
+    {
+      "id": "S08",
+      "name": "Air Knife / Coating",
+      "critical": [
+        "AK_TOP_PRESSURE",
+        "AK_BOTTOM_PRESSURE",
+        "AK_DISTANCE",
+        "COATING_WEIGHT"
+      ]
+    },
+    {
+      "id": "S09",
+      "name": "Cooling / SPM / TLL",
+      "critical": [
+        "COOLING_OUTLET_TEMP",
+        "SPM_REDUCTION",
+        "SPM_ROLLING_FORCE",
+        "TLL_TENSION",
+        "FLATNESS_INDEX"
+      ]
+    },
+    {
+      "id": "S10",
+      "name": "Exit / Recoiler",
+      "critical": [
+        "EXIT_ACC_LEVEL",
+        "RECOILER_TENSION",
+        "RECOILER_TORQUE",
+        "COIL_DIAMETER"
+      ]
+    }
+  ]
+}

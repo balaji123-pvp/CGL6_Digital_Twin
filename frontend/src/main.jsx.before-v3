@@ -1,0 +1,207 @@
+import React, { useEffect, useRef, useState } from "react";
+import { createRoot } from "react-dom/client";
+import * as THREE from "three";
+import IndustrialLine from "./IndustrialLine.jsx";
+import "./styles.css";
+
+const API = "http://127.0.0.1:8000";
+const heat = v => new THREE.Color().setHSL((1 - Math.max(0, Math.min(1, v / 100))) * 0.66, 0.9, 0.5);
+
+function Status({ s }) {
+  return <span className={"status " + s.toLowerCase()}>{s}</span>;
+}
+
+function KPI({ label, value, unit = "" }) {
+  return <div className="kpi"><div className="label">{label}</div><div className="value">{value}<small>{unit}</small></div></div>;
+}
+
+function App() {
+  const [d, setD] = useState(null);
+  const [mode, setMode] = useState("LIVE_SIMULATION");
+  const [engineering, setEngineering] = useState(null);
+  const [view, setView] = useState("TWIN");
+  const frameRef = useRef(null);
+
+  useEffect(() => {
+    const socket = new WebSocket("ws://127.0.0.1:8000/ws/live");
+    socket.onmessage = event => setD(JSON.parse(event.data));
+    return () => socket.close();
+  }, []);
+
+  useEffect(() => {
+    fetch(API + "/api/engineering/summary")
+      .then(response => response.ok ? response.json() : null)
+      .then(setEngineering)
+      .catch(() => {});
+  }, []);
+
+  async function modeSet(nextMode) {
+    setMode(nextMode);
+    try {
+      await fetch(API + "/api/mode/" + nextMode, { method: "POST" });
+    } catch {}
+  }
+
+  async function fault(name) {
+    try {
+      await fetch(API + "/api/fault", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fault: name, enabled: true, severity: 1 })
+      });
+    } catch {}
+  }
+
+  function syncDashboard() {
+    const child = frameRef.current?.contentWindow;
+    if (!child || !d) return;
+    child.postMessage({ type: "CGL6_TWIN_TELEMETRY", payload: d }, window.location.origin);
+    const dashboardMode = {
+      LIVE_SIMULATION: "LIVE",
+      HISTORIAN: "HISTORIAN",
+      WHAT_IF: "WHAT-IF",
+      FAULT_TRAINING: "FAILURE"
+    }[mode] || "LIVE";
+    child.postMessage({ type: "CGL6_PARENT_MODE", mode: dashboardMode }, window.location.origin);
+  }
+
+  useEffect(syncDashboard, [d, mode, view]);
+
+  useEffect(() => {
+    function receiveDashboardMode(event) {
+      if (event.origin !== window.location.origin || event.source !== frameRef.current?.contentWindow) return;
+      if (event.data?.type !== "CGL6_SET_MODE") return;
+      const allowed = ["LIVE_SIMULATION", "HISTORIAN", "WHAT_IF", "FAULT_TRAINING"];
+      if (allowed.includes(event.data.mode)) modeSet(event.data.mode);
+    }
+    window.addEventListener("message", receiveDashboardMode);
+    return () => window.removeEventListener("message", receiveDashboardMode);
+  }, []);
+
+  if (!d) return <div className="loading">CONNECTING TO CGL-6 DIGITAL TWIN...</div>;
+  const b4 = d.drives.filter(drive => drive.id.includes("B4"));
+
+  return (
+    <div className="app">
+      <header>
+        <div>
+          <div className="title">JSW JFE STEEL LIMITED — CGL-6</div>
+          <div className="sub">CMI CGL | 21 MT CLASS | DIGITAL TWIN COMMAND CENTER</div>
+        </div>
+        <div className="header-tools">
+          <nav className="views" aria-label="Digital twin views">
+            <button className={view === "TWIN" ? "active" : ""} onClick={() => setView("TWIN")}>3D TWIN</button>
+            <button className={view === "DASHBOARD" ? "active" : ""} onClick={() => setView("DASHBOARD")}>30-FEATURE DASHBOARD</button>
+          </nav>
+          <div className="modes">
+            {["LIVE_SIMULATION", "HISTORIAN", "WHAT_IF", "FAULT_TRAINING"].map(nextMode =>
+              <button key={nextMode} className={mode === nextMode ? "active" : ""} onClick={() => modeSet(nextMode)}>{nextMode}</button>
+            )}
+          </div>
+        </div>
+      </header>
+      <div className="note">⚠ ENGINEERING SEED DATA — simulated telemetry; not connected to live PLC/DCS</div>
+
+      {view === "TWIN" ? (
+        <>
+          <section className="kpis">
+            <KPI label="LINE SPEED" value={d.line_speed_mpm.toFixed(1)} unit=" m/min" />
+            <KPI label="THICKNESS" value={d.strip_thickness_mm.toFixed(3)} unit=" mm" />
+            <KPI label="WIDTH" value={d.strip_width_mm.toFixed(0)} unit=" mm" />
+            <KPI label="LINE TENSION" value={d.line_tension_kg.toFixed(0)} unit=" kgf" />
+            <KPI label="COIL REMAINING" value={d.coil.remaining_length_m.toFixed(0)} unit=" m" />
+            <KPI label="QUALITY" value={d.coil.quality_score.toFixed(1)} unit=" %" />
+          </section>
+
+          <main>
+            <div className="scene"><IndustrialLine data={d} engineering={engineering} /></div>
+            <aside>
+              <h3>COIL TRACKING</h3>
+              <div className="grid">
+                <KPI label="COIL ID" value={d.coil.coil_id} />
+                <KPI label="GRADE" value={d.coil.grade} />
+                <KPI label="LENGTH" value={d.coil.total_length_m.toFixed(0)} unit=" m" />
+                <KPI label="POSITION" value={d.coil.position_m.toFixed(0)} unit=" m" />
+                <KPI label="TOP COAT" value={d.coil.top_coat_gm2.toFixed(1)} unit=" g/m²" />
+                <KPI label="BOTTOM COAT" value={d.coil.bottom_coat_gm2.toFixed(1)} unit=" g/m²" />
+              </div>
+
+              <h3>EQUIPMENT HEALTH</h3>
+              <div className="grid">
+                <KPI label="EQUIPMENT" value={d.equipment_health_pct.toFixed(1)} unit=" %" />
+                <KPI label="NETWORK" value={d.network_health_pct.toFixed(1)} unit=" %" />
+                <KPI label="PLC" value={d.plc_health_pct.toFixed(1)} unit=" %" />
+              </div>
+
+              <h3>B4A / B4B DRIVE</h3>
+              <table>
+                <thead><tr><th>Drive</th><th>RPM</th><th>Torque</th><th>Current</th><th>Load</th><th>Health</th></tr></thead>
+                <tbody>{b4.map(drive =>
+                  <tr key={drive.id}>
+                    <td>{drive.name}</td><td>{drive.rpm.toFixed(1)}</td><td>{drive.torque_pct.toFixed(1)}%</td>
+                    <td>{drive.current_a.toFixed(0)} A</td><td>{drive.load_pct.toFixed(1)}%</td><td><Status s={drive.health} /></td>
+                  </tr>
+                )}</tbody>
+              </table>
+
+              <h3>FURNACE HEAT MAP</h3>
+              <div className="heatmap">{d.furnace_zones.map(zone =>
+                <div key={zone.id} className="heatcell" style={{ background: heat(zone.heat_index).getStyle() }}>
+                  <span>{zone.name}</span><b>{zone.temperature_c.toFixed(0)}°C</b>
+                </div>
+              )}</div>
+
+              <h3>COOLING ZONES</h3>
+              <div className="zones">{d.cooling_zones.map(zone =>
+                <div key={zone.id} className="zone"><span>{zone.name}</span><b>{zone.strip_temp_c.toFixed(0)}°C</b><Status s={zone.status} /></div>
+              )}</div>
+
+              <h3>ZINC POT</h3>
+              <div className="zinc">{[
+                ["Bath", d.zinc_pot.temperature_c.toFixed(1) + " °C"],
+                ["Level", d.zinc_pot.level_mm.toFixed(0) + " mm"],
+                ["Al", d.zinc_pot.al_pct.toFixed(3) + " %"],
+                ["Fe", d.zinc_pot.fe_pct.toFixed(3) + " %"],
+                ["Air Knife", d.zinc_pot.air_knife_pressure_bar.toFixed(2) + " bar"],
+                ["Coating", d.zinc_pot.coating_gm2.toFixed(1) + " g/m²"]
+              ].map(([label, value]) => <React.Fragment key={label}><span>{label}</span><b>{value}</b></React.Fragment>)}</div>
+
+              <h3>ENGINEERING BASIS · V4 SEED</h3>
+              {engineering && <div className="eng-panel">
+                <div><span>DATA STATUS</span><b>{engineering.data_status}</b></div>
+                <div><span>SPEED NOMINAL / DESIGN / MAX</span><b>{engineering.speeds_mpm.nominal} / {engineering.speeds_mpm.design} / {engineering.speeds_mpm.maximum} m/min</b></div>
+                <div><span>FURNACE</span><b>{engineering.furnace.zones} zones · {engineering.furnace.burners_per_zone} burners/zone</b></div>
+                <div><span>FUEL</span><b>{engineering.furnace.main_fuel} + {engineering.furnace.pilot_fuel} pilot</b></div>
+                <div><span>TAG / PROCESS / SCENARIO RECORDS</span><b>{engineering.tag_count} / {engineering.topology_section_count} / {engineering.scenario_count}</b></div>
+                <div><span>V4 FAULT SCENARIOS</span><b>{engineering.fault_scenario_count}</b></div>
+                <div><span>BRIDLE TENSION SEED</span><b>{engineering.bridles.nominal_tension_kn} kN ({engineering.bridles.nominal_tension_kgf.toFixed(0)} kgf)</b></div>
+              </div>}
+              {engineering && <div className="process-flow">{engineering.topology_sections.map(section =>
+                <span key={section.id}>{section.name}</span>
+              )}</div>}
+
+              <h3>FAULT TRAINING</h3>
+              <div className="buttons">{[
+                ["b4_tension_oscillation", "B4 TENSION"], ["b4_torque_spike", "B4 TORQUE"],
+                ["encoder_fault", "B4 ENCODER"], ["drive_comms_fault", "DRIVE COMMS"],
+                ["cooling_zone_failure", "COOLING"], ["furnace_zone_unbalance", "FURNACE"],
+                ["zinc_pot_temp_deviation", "ZINC POT"], ["load_cell_noise", "LOAD CELL"]
+              ].map(([faultName, label]) => <button key={faultName} onClick={() => fault(faultName)}>{label}</button>)}</div>
+              {d.alarms.length > 0 && <div className="alarms"><b>ACTIVE ALARMS</b>{d.alarms.map(alarm => <div key={alarm}>{alarm}</div>)}</div>}
+            </aside>
+          </main>
+        </>
+      ) : (
+        <iframe
+          ref={frameRef}
+          className="command-frame"
+          src="/cgl6-command-center/index.html"
+          title="CGL-6 30-feature digital twin dashboard"
+          onLoad={syncDashboard}
+        />
+      )}
+    </div>
+  );
+}
+
+createRoot(document.getElementById("root")).render(<App />);

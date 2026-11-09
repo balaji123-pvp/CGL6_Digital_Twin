@@ -1,0 +1,55 @@
+{
+  "project": "CGL - 6 JJSL",
+  "source_project": "BPSL_CGL / BPSL_C_3",
+  "actual_objects": [
+    {
+      "object": "BR_4A",
+      "type": "DB",
+      "number": 65
+    },
+    {
+      "object": "BR_4B",
+      "type": "DB",
+      "number": 66
+    },
+    {
+      "object": "Br_4a_Drv",
+      "type": "FB instance",
+      "number": 6,
+      "instance_db": 115
+    },
+    {
+      "object": "Br_4b_Drv",
+      "type": "FB instance",
+      "number": 6,
+      "instance_db": 116
+    },
+    {
+      "object": "BR4TenDiag",
+      "type": "FB instance",
+      "number": 142,
+      "instance_db": 26
+    },
+    {
+      "object": "Motor_Trq_Ten_Calc",
+      "type": "FC",
+      "number": 47
+    },
+    {
+      "object": "BREAKUP ERROR",
+      "type": "OB",
+      "number": 88
+    }
+  ],
+  "logic_chain": [
+    "Process_Speed_Ref FC104",
+    "Entry/Exit speed references",
+    "Bridle 4A/4B drive control FB6",
+    "Motor torque / speed feedback",
+    "Motor_Trq_Ten_Calc FC47",
+    "BR4TenDiag DB26 / FB142",
+    "breakup supervision",
+    "OB88 BREAKUP ERROR"
+  ],
+  "safety_note": "Simulation only. No write path to PLC. Real PLC/OPC integration must be approved and read-only first."
+}

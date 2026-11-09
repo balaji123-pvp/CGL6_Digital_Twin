@@ -1,0 +1,90 @@
+{
+  "engine": "CGL6 Closed Loop V6",
+  "faults": [
+    {
+      "id": "one_burner_flame_failure",
+      "default_target": "Z2_B3",
+      "severity": "HIGH"
+    },
+    {
+      "id": "multiple_burner_failure",
+      "default_target": "Z1_B2,Z2_B2,Z3_B2",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "low_cog_pressure",
+      "severity": "CRITICAL",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "high_cog_pressure",
+      "severity": "HIGH",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "cog_gcv_variation",
+      "severity": "MEDIUM",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "low_combustion_air",
+      "severity": "HIGH",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "high_combustion_air",
+      "severity": "MEDIUM",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "o2_analyzer_failure",
+      "severity": "HIGH",
+      "default_target": "BIAS_HIGH"
+    },
+    {
+      "id": "furnace_pressure_excursion",
+      "severity": "HIGH",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "exhaust_fan_degradation",
+      "severity": "HIGH",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "lpg_pilot_failure",
+      "severity": "CRITICAL",
+      "default_target": "Z2_B3"
+    },
+    {
+      "id": "air_knife_pressure_loss",
+      "severity": "HIGH",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "air_knife_asymmetry",
+      "severity": "HIGH",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "strip_speed_increase",
+      "severity": "HIGH",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "thickness_change",
+      "severity": "MEDIUM",
+      "default_magnitude": 0
+    },
+    {
+      "id": "strip_break",
+      "severity": "CRITICAL",
+      "default_magnitude": 1.0
+    },
+    {
+      "id": "drive_overload",
+      "severity": "CRITICAL",
+      "default_magnitude": 1.0
+    }
+  ]
+}

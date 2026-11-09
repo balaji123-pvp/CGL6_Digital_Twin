@@ -1,0 +1,50 @@
+from fastapi import FastAPI,WebSocket,WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+from .models import FaultCommand,WhatIfCommand
+from .simulator import CGL6Twin
+from .engineering_data import FAULT_SCENARIOS, SCENARIOS, SEED, TOPOLOGY, engineering_summary, read_tags
+import asyncio
+app=FastAPI(title="JSW JFE CGL-6 Digital Twin",version="1.0")
+app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
+twin=CGL6Twin()
+@app.get("/api/health")
+def health(): return {"status":"OK","line":"CGL-6","source":"ENGINEERING SEED SIMULATOR","engineering_data_status":engineering_summary()["data_status"],"mode":twin.mode}
+@app.get("/api/config")
+def config(): return twin.config()
+@app.get("/api/engineering/summary")
+def engineering_summary_api(): return engineering_summary()
+@app.get("/api/engineering/seed")
+@app.get("/api/seed")
+def engineering_seed(): return SEED
+@app.get("/api/engineering/tags")
+@app.get("/api/tags")
+def engineering_tags(section:str|None=None): return read_tags(section)
+@app.get("/api/engineering/topology")
+@app.get("/api/topology")
+def engineering_topology(): return TOPOLOGY
+@app.get("/api/engineering/scenarios")
+@app.get("/api/scenarios")
+def engineering_scenarios(): return SCENARIOS
+@app.get("/api/engineering/fault-scenarios")
+@app.get("/api/fault-scenarios")
+def engineering_fault_scenarios(): return FAULT_SCENARIOS
+@app.get("/api/snapshot")
+def snapshot(): return twin.step(0)
+@app.post("/api/fault")
+def fault(c:FaultCommand):
+    twin.set_fault(c.fault,c.enabled,c.severity); return {"active_faults":twin.active_faults}
+@app.post("/api/whatif")
+def whatif(c:WhatIfCommand):
+    twin.set_whatif(**c.model_dump()); return {"what_if":twin.whatif}
+@app.post("/api/mode/{mode}")
+def mode(mode:str):
+    allowed=["LIVE_SIMULATION","HISTORIAN","WHAT_IF","FAULT_TRAINING"]
+    if mode not in allowed:return {"ok":False,"error":"Invalid mode"}
+    twin.set_mode(mode);return {"ok":True,"mode":mode}
+@app.websocket("/ws/live")
+async def live(ws:WebSocket):
+    await ws.accept()
+    try:
+        while True:
+            await ws.send_text(twin.step(.2).model_dump_json());await asyncio.sleep(.2)
+    except WebSocketDisconnect: pass

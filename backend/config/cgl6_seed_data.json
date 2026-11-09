@@ -1,0 +1,256 @@
+{
+  "metadata": {
+    "line_id": "CGL-6",
+    "data_status": "ENGINEERING_SEED_NOT_ACTUAL",
+    "basis": "Generic high-speed CGL similar-capacity architecture",
+    "purpose": "Digital twin development and initial scenario testing",
+    "nominal_speed_mpm": 120,
+    "design_speed_mpm": 180,
+    "max_speed_mpm": 200,
+    "strip_width_min_mm": 700,
+    "strip_width_max_mm": 1600,
+    "strip_thickness_min_mm": 0.12,
+    "strip_thickness_max_mm": 0.16,
+    "model_version": "V5",
+    "supported_thicknesses_mm": [
+      0.12,
+      0.14,
+      0.16
+    ],
+    "fuel_basis": "COG",
+    "cog_supply_pressure_mmh2o": 950,
+    "cog_gcv_kcal_nm3": 4100,
+    "product_thickness_mm": [
+      0.12,
+      0.14,
+      0.16
+    ]
+  },
+  "entry": {
+    "payoff_max_coil_t": 30,
+    "payoff_mandrel_diameter_mm": 610,
+    "entry_accumulator_capacity_m": 300,
+    "entry_accumulator_normal_pct": 50,
+    "strip_centerline_tolerance_mm": 2.0,
+    "entry_tension_kn": 8.0
+  },
+  "bridles": {
+    "entry_bridles": 4,
+    "process_bridles": 2,
+    "exit_bridles": 3,
+    "nominal_tension_kn": 20.0,
+    "max_tension_kn": 45.0,
+    "speed_mismatch_pct_warn": 0.3,
+    "speed_mismatch_pct_trip": 1.0
+  },
+  "cleaning": {
+    "alkali_tank_temp_c": 75,
+    "alkali_concentration_pct": 2.5,
+    "alkali_flow_m3_h": 25,
+    "brush_roll_speed_rpm": 900,
+    "brush_pressure_bar": 2.0,
+    "hot_rinse_temp_c": 70,
+    "rinse_conductivity_uS_cm": 100
+  },
+  "furnace": {
+    "zone_count": 3,
+    "zone_lengths_m": [
+      20,
+      30,
+      40
+    ],
+    "total_length_m": 90,
+    "fuel_type": "COG",
+    "pilot_fuel_type": "LPG",
+    "burners_per_zone": 4,
+    "total_burners": 12,
+    "burner_configuration": "3 zones x 4 burners/zone",
+    "main_fuel_lhv_mj_nm3": 4.2,
+    "pilot_fuel_lhv_mj_nm3": 25.5,
+    "nominal_zone_cog_nm3_h": [
+      110,
+      150,
+      130
+    ],
+    "max_zone_cog_nm3_h": [
+      220,
+      300,
+      260
+    ],
+    "nominal_burner_cog_nm3_h": [
+      27.5,
+      37.5,
+      32.5
+    ],
+    "max_burner_cog_nm3_h": [
+      55,
+      75,
+      65
+    ],
+    "nominal_pilot_lpg_nm3_h_per_burner": 1.5,
+    "max_pilot_lpg_nm3_h_per_burner": 3.0,
+    "pilot_enabled_in_run": true,
+    "target_strip_temp_c": 800,
+    "nominal_strip_outlet_temp_c": 650,
+    "max_strip_temp_c": 850,
+    "zone_setpoints_c": [
+      760,
+      800,
+      720
+    ],
+    "zone_tolerance_c": 8,
+    "o2_pct_target": 2.0,
+    "o2_pct_low": 0.8,
+    "o2_pct_high": 4.0,
+    "h2_pct_target": 5.0,
+    "h2_pct_low": 3.0,
+    "h2_pct_high": 8.0,
+    "pressure_pa_target": -25,
+    "pressure_pa_low": -80,
+    "pressure_pa_high": 20,
+    "furnace_efficiency": 0.55,
+    "fuel_lhv_mj_nm3": 4.2,
+    "pilot_lhv_mj_nm3": 25.5,
+    "heat_transfer_w_m2k": 85,
+    "wall_loss_fraction": 0.08,
+    "combustion_air_ratio_nm3_per_nm3_cog": 8.5,
+    "minimum_burners_running_per_zone": 2,
+    "recommended_burners_running_per_zone": 4,
+    "main_fuel": "COG",
+    "cog_supply_pressure_mmh2o": 950,
+    "cog_gcv_kcal_nm3": 4100,
+    "cog_gcv_mj_nm3": 17.16,
+    "cog_reference_temp_c": 15,
+    "cog_reference_pressure_mmh2o": 950,
+    "lpg_pilot_fuel": "LPG",
+    "lpg_pilot_flow_seed_nm3_h_per_burner": 4.0,
+    "co2_dry_pct_seed": 8.0,
+    "o2_target_pct": 2.0,
+    "air_excess_factor_seed": 1.1,
+    "combustion_efficiency_seed": 0.96,
+    "zone_target_strip_outlet_c": [
+      720,
+      800,
+      650
+    ],
+    "zone_wall_loss_kw": [
+      80,
+      110,
+      120
+    ],
+    "burner_rated_cog_nm3_h": [
+      180,
+      180,
+      180,
+      180
+    ],
+    "burner_min_cog_nm3_h": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "burner_max_cog_nm3_h": [
+      180,
+      180,
+      180,
+      180
+    ],
+    "burner_nominal_air_nm3_h": [
+      1900,
+      1900,
+      1900,
+      1900
+    ],
+    "burner_max_air_nm3_h": [
+      2600,
+      2600,
+      2600,
+      2600
+    ],
+    "pilot_lpg_min_nm3_h": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "pilot_lpg_max_nm3_h": [
+      8.0,
+      8.0,
+      8.0,
+      8.0
+    ],
+    "pilot_lpg_lightoff_s": 5,
+    "flame_proving_s": 3,
+    "burner_trip_on_flame_loss": true,
+    "air_fuel_ratio_mode": "oxygen_trim",
+    "pressure_control_target_pa": -25,
+    "pressure_control_low_pa": -80,
+    "pressure_control_high_pa": 20,
+    "air_fan_capacity_nm3_h": 25000,
+    "exhaust_fan_capacity_nm3_h": 30000
+  },
+  "pot": {
+    "bath_temperature_c": 460,
+    "bath_temperature_low_c": 455,
+    "bath_temperature_high_c": 465,
+    "bath_level_mm": 500,
+    "bath_level_min_mm": 350,
+    "bath_level_max_mm": 650,
+    "zinc_density_kg_m3": 7140,
+    "bath_width_m": 1.8,
+    "bath_depth_m": 1.0,
+    "immersion_length_m": 2.0,
+    "nominal_heat_loss_kw": 250,
+    "induction_heater_capacity_kw": 500
+  },
+  "air_knife": {
+    "knife_gap_mm": 8,
+    "knife_to_strip_distance_mm": 12,
+    "nominal_pressure_kpa": 35,
+    "pressure_min_kpa": 15,
+    "pressure_max_kpa": 80,
+    "nominal_air_flow_nm3_h": 9000,
+    "edge_masking_pct": 0
+  },
+  "cooling": {
+    "cooling_length_m": 20,
+    "air_flow_nm3_h": 12000,
+    "air_temperature_c": 30,
+    "nominal_outlet_strip_temp_c": 120,
+    "max_outlet_strip_temp_c": 160
+  },
+  "spm_tll": {
+    "spm_speed_mpm": 120,
+    "reduction_pct": 0.5,
+    "reduction_max_pct": 2.0,
+    "rolling_force_kn": 800,
+    "tension_leveller_tension_kn": 25
+  },
+  "exit": {
+    "exit_accumulator_capacity_m": 250,
+    "recoiler_max_tension_kn": 40,
+    "recoiler_nominal_tension_kn": 18
+  },
+  "motors": {
+    "standard_drive_efficiency": 0.94,
+    "max_drive_load_pct": 100,
+    "warn_drive_load_pct": 85,
+    "high_drive_load_pct": 95
+  },
+  "quality": {
+    "coating_target_g_m2": 90,
+    "coating_low_g_m2": 70,
+    "coating_high_g_m2": 120,
+    "strip_temp_target_c": 650,
+    "strip_temp_tolerance_c": 10,
+    "flatness_target_ibu": 0.0,
+    "thickness_tolerance_pct": 0.3,
+    "width_tolerance_mm": 1.5
+  },
+  "line_speed_basis": {
+    "thin_gauge_mpm_target": 160,
+    "thin_gauge_mpm_max": 200,
+    "note": "Seed values for 0.12/0.14/0.16 mm; actual speed limits must be validated against CGL-6 OEM/process capability."
+  }
+}

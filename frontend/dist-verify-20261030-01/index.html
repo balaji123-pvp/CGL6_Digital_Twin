@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>JSW JFE CGL-6 Digital Twin</title>
+    <script type="module" crossorigin src="/assets/index-DQtcXMF-.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CvzLfaVP.css">
+  </head>
+  <body>
+    <div id="root">
+      <div id="boot-fallback" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#06111d;color:#d7e9f8;font:14px Segoe UI,Arial,sans-serif">
+        <h1 style="font-size:18px">CGL-6 JJSL DIGITAL TWIN</h1>
+        <p>Starting frontend…</p>
+      </div>
+    </div>
+    <script>
+      (() => {
+        const report = (message) => {
+          if (window.__CGL6_APP_MOUNTED) return;
+          const root = document.getElementById('root');
+          if (!root) return;
+          const box = document.createElement('div');
+          box.style.cssText = 'min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:#06111d;color:#d7e9f8;font:14px Segoe UI,Arial,sans-serif;text-align:center';
+          const heading = document.createElement('h1');
+          heading.textContent = 'Frontend startup error';
+          const detail = document.createElement('p');
+          detail.style.cssText = 'max-width:760px;color:#ff9ba4;white-space:pre-wrap';
+          detail.textContent = String(message || 'The frontend did not start. Check the VS Code terminal for errors.');
+          box.append(heading, detail);
+          root.replaceChildren(box);
+        };
+        window.addEventListener('error', (event) => report(event.message || 'Could not load the frontend module.'));
+        window.addEventListener('unhandledrejection', (event) => report(event.reason?.message || event.reason || 'Frontend initialization failed.'));
+        window.setTimeout(() => {
+          if (!window.__CGL6_APP_MOUNTED) report('React did not start. Check the VS Code terminal and browser console.');
+        }, 12000);
+      })();
+    </script>
+  </body>
+</html>

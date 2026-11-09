@@ -1,0 +1,54 @@
+from pydantic import BaseModel, Field
+from typing import List, Dict
+
+class Drive(BaseModel):
+    id:str; name:str; rpm:float; speed_mpm:float; torque_pct:float
+    current_a:float; load_pct:float; motor_temp_c:float; drive_temp_c:float
+    dc_bus_v:float; speed_error_pct:float; encoder_ok:bool
+    communication_ok:bool; health:str; state:str
+
+class Bridle(BaseModel):
+    id:str; name:str; speed_mpm:float; tension_kg:float; torque_pct:float
+    load_pct:float; slip_pct:float; speed_ratio:float; health:str
+
+class FurnaceZone(BaseModel):
+    id:str; name:str; temperature_c:float; setpoint_c:float
+    output_pct:float; delta_c:float; heat_index:float; status:str
+
+class CoolingZone(BaseModel):
+    id:str; name:str; strip_temp_c:float; water_temp_c:float
+    flow_m3h:float; pressure_bar:float; output_pct:float
+    delta_to_target_c:float; status:str
+
+class ZincPot(BaseModel):
+    temperature_c:float; setpoint_c:float; level_mm:float
+    al_pct:float; fe_pct:float; bath_delta_c:float
+    strip_entry_temp_c:float; strip_exit_temp_c:float
+    air_knife_pressure_bar:float; coating_gm2:float; status:str
+
+class Coil(BaseModel):
+    coil_id:str; grade:str; width_mm:float; thickness_mm:float
+    total_length_m:float; remaining_length_m:float; position_m:float
+    speed_mpm:float; entry_temp_c:float; furnace_exit_temp_c:float
+    zinc_entry_temp_c:float; zinc_exit_temp_c:float
+    top_coat_gm2:float; bottom_coat_gm2:float; quality_score:float
+
+class Telemetry(BaseModel):
+    timestamp:float; mode:str; data_quality:str
+    line_speed_mpm:float; strip_width_mm:float; strip_thickness_mm:float
+    line_tension_kg:float; line_length_m:float
+    coil:Coil; bridles:List[Bridle]; drives:List[Drive]
+    furnace_zones:List[FurnaceZone]; cooling_zones:List[CoolingZone]
+    zinc_pot:ZincPot; equipment_health_pct:float
+    network_health_pct:float; plc_health_pct:float
+    alarms:List[str]=Field(default_factory=list)
+    active_faults:Dict[str,float]=Field(default_factory=dict)
+
+class FaultCommand(BaseModel):
+    fault:str; enabled:bool=True; severity:float=1.0
+
+class WhatIfCommand(BaseModel):
+    line_speed_mpm:float|None=None
+    thickness_mm:float|None=None
+    tension_kg:float|None=None
+    zinc_temp_c:float|None=None

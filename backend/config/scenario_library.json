@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Speed increase 120->150 m/min",
+    "changes": [
+      {
+        "parameter": "line_speed_mpm",
+        "value": 150
+      }
+    ]
+  },
+  {
+    "name": "Speed increase + furnace compensation",
+    "changes": [
+      {
+        "parameter": "line_speed_mpm",
+        "value": 150
+      },
+      {
+        "parameter": "furnace_zone_fuel_nm3_h",
+        "value": null
+      }
+    ]
+  },
+  {
+    "name": "Air knife pressure increase",
+    "changes": [
+      {
+        "parameter": "airknife_top_kpa",
+        "value": 45
+      },
+      {
+        "parameter": "airknife_bottom_kpa",
+        "value": 45
+      }
+    ]
+  },
+  {
+    "name": "Low furnace O2 fault",
+    "changes": [
+      {
+        "parameter": "furnace_o2_pct",
+        "value": 0.5
+      }
+    ]
+  },
+  {
+    "name": "Low bath temperature",
+    "changes": [
+      {
+        "parameter": "bath_temp_c",
+        "value": 450
+      }
+    ]
+  },
+  {
+    "name": "High tension case",
+    "changes": [
+      {
+        "parameter": "process_tension_kn",
+        "value": 35
+      }
+    ]
+  }
+]

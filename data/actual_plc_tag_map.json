@@ -1,0 +1,524 @@
+{
+  "source": "BPSL_C_3.zip / YDBs/30977/SYMLIST.DBF",
+  "count": 74,
+  "tags": [
+    {
+      "symbol": "BR4TenDiag",
+      "address": "DB     26",
+      "datatype": "FB    142",
+      "comment": "",
+      "db": "26"
+    },
+    {
+      "symbol": "BREAKUP ERROR",
+      "address": "OB     88",
+      "datatype": "OB     88",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "BR_4A",
+      "address": "DB     65",
+      "datatype": "DB     65",
+      "comment": "",
+      "db": "65"
+    },
+    {
+      "symbol": "BR_4B",
+      "address": "DB     66",
+      "datatype": "DB     66",
+      "comment": "",
+      "db": "66"
+    },
+    {
+      "symbol": "Br_4a_Dia_Calc_Per",
+      "address": "M      36.3",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Dia_Trig",
+      "address": "M      36.4",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Drv",
+      "address": "DB    115",
+      "datatype": "FB      6",
+      "comment": "",
+      "db": "115"
+    },
+    {
+      "symbol": "Br_4a_Drv_Alarm",
+      "address": "M      37.4",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Drv_Healthy",
+      "address": "M      37.3",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Drv_On",
+      "address": "M      36.6",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Drv_On_Cmd",
+      "address": "M      36.7",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Drv_Rdy",
+      "address": "M      37.0",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Drv_Rdy_Ref",
+      "address": "M      37.2",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Drv_Rdy_Run",
+      "address": "M      37.1",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Drv_Remote",
+      "address": "M      37.5",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Jog_Fwd",
+      "address": "M      36.1",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4a_Jog_Rev",
+      "address": "M      36.2",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Dia_Calc_Per",
+      "address": "M      38.3",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Dia_Trig",
+      "address": "M      38.4",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Drv",
+      "address": "DB    116",
+      "datatype": "FB      6",
+      "comment": "",
+      "db": "116"
+    },
+    {
+      "symbol": "Br_4b_Drv_Alarm",
+      "address": "M      39.4",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Drv_Healthy",
+      "address": "M      39.3",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Drv_On",
+      "address": "M      38.6",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Drv_On_Cmd",
+      "address": "M      38.7",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Drv_Rdy",
+      "address": "M      39.0",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Drv_Rdy_Ref",
+      "address": "M      39.2",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Drv_Rdy_Run",
+      "address": "M      39.1",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Drv_Remote",
+      "address": "M      39.5",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Jog_Fwd",
+      "address": "M      38.1",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Br_4b_Jog_Rev",
+      "address": "M      38.2",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "CP13_BR_4A_FWD",
+      "address": "I      95.0",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "CP13_BR_4A_GRP_JOG_FWD",
+      "address": "I      96.4",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "CP13_BR_4A_GRP_JOG_REV",
+      "address": "I      96.5",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "CP13_BR_4A_REV",
+      "address": "I      95.1",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "CP13_BR_4A_SNB_LOWER",
+      "address": "I      96.3",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "CP13_BR_4A_SNB_RAISE",
+      "address": "I      96.2",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "CP13_BR_4B_FWD",
+      "address": "I      95.6",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "CP13_BR_4B_REV",
+      "address": "I      95.7",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Ent_Acc_Tns_Spd_Ref",
+      "address": "MD    244",
+      "datatype": "REAL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Ext_Acc_Tns_Spd_Ref",
+      "address": "MD    334",
+      "datatype": "REAL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "FLTR_BR2_LOADCELL",
+      "address": "DB    500",
+      "datatype": "FB    201",
+      "comment": "",
+      "db": "500"
+    },
+    {
+      "symbol": "FLTR_HBR_LOADCELL",
+      "address": "DB    501",
+      "datatype": "FB    201",
+      "comment": "",
+      "db": "501"
+    },
+    {
+      "symbol": "FurLoadCellModeDeselTrig",
+      "address": "M     622.4",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "FurLoadCellModeSel",
+      "address": "M     622.2",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "FurLoadCellModeSelReq",
+      "address": "M     622.0",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "FurLoadCellModeSelTrig",
+      "address": "M     622.1",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "FurLoadCellModeSelected",
+      "address": "M     622.3",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "FurLoadCellPid",
+      "address": "DB     16",
+      "datatype": "FB     41",
+      "comment": "",
+      "db": "16"
+    },
+    {
+      "symbol": "Fur_LoadCell_Kgs",
+      "address": "MD    352",
+      "datatype": "REAL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Furnace_PLC_Comm",
+      "address": "FC     90",
+      "datatype": "FC     90",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Furnace_Ten_On",
+      "address": "M      24.0",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "HF_Furnace_PLC_Data_Send",
+      "address": "DB    401",
+      "datatype": "DB    401",
+      "comment": "",
+      "db": "401"
+    },
+    {
+      "symbol": "HF_Furnace_Trip",
+      "address": "M     724.0",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "JB46_BR4A_BRK_ON",
+      "address": "I     108.3",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "JB46_BR4B_BRK_ON",
+      "address": "I     108.4",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "JB46_BR_4A_BRK_ON",
+      "address": "Q      53.0",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "JB46_BR_4A_SNBR_RAISE",
+      "address": "I     108.5",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "JB46_BR_4A_SNB_LOWER",
+      "address": "Q      53.3",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "JB46_BR_4A_SNB_RAISE",
+      "address": "Q      53.2",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "JB46_BR_4B_BRK_ON",
+      "address": "Q      53.1",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "MCD_PHF_BURNR_EMG_STOP",
+      "address": "I     173.6",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Motor_Trq_Ten_Calc",
+      "address": "FC     47",
+      "datatype": "FC     47",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "PotLoadCellFbKgs",
+      "address": "MD    704",
+      "datatype": "REAL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "PotLoadCellModeDeselTrig",
+      "address": "M     623.4",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "PotLoadCellModeSel",
+      "address": "M     623.2",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "PotLoadCellModeSelReq",
+      "address": "M     623.0",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "PotLoadCellModeSelTrig",
+      "address": "M     623.1",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "PotLoadCellModeSelected",
+      "address": "M     623.3",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "PotLoadCellPid",
+      "address": "DB     17",
+      "datatype": "FB     41",
+      "comment": "",
+      "db": "17"
+    },
+    {
+      "symbol": "Rec_Tns_Spd_Ref",
+      "address": "MD    640",
+      "datatype": "REAL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Unc1_Tension_On",
+      "address": "M       3.0",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Unc1_Tns_Spd_Ref",
+      "address": "MD    632",
+      "datatype": "REAL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Unc2_Tension_On",
+      "address": "M       3.1",
+      "datatype": "BOOL",
+      "comment": "",
+      "db": null
+    },
+    {
+      "symbol": "Unc2_Tns_Spd_Ref",
+      "address": "MD    636",
+      "datatype": "REAL",
+      "comment": "",
+      "db": null
+    }
+  ]
+}
