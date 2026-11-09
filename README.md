@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # JSW JFE Steel Limited — CGL Line 6 — 3D Digital Twin
 
 This is a simulated/interpolated industrial digital twin for a CMI-type CGL Line 6.
@@ -28,3 +29,6 @@ Replace backend/app/collector.py with the approved OPC UA/OPC DA/PLC gateway.
 Keep the normalized telemetry model unchanged so the 3D frontend does not need rewriting.
 
 Do not treat simulated values as CMI OEM design limits or plant operating limits.
+=======
+# CGL6_Digital_Twin
+>>>>>>> 7d351ac7ee7497630c203ca81176102cc57b5d11
